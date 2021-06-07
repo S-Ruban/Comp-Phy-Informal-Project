@@ -1,4 +1,7 @@
 import pygame   # used pygame to draw and colour the board
+import random
+import matplotlib.pyplot as plt
+import time
 
 
 def step():     # this function updates the state of the board
@@ -26,20 +29,39 @@ def copy():     # transfer contents of duplicate board to original board
             board[i][j] = board2[i][j]
 
 
+def count():
+    c = 0
+    for i in range(rows):
+        for j in range(cols):
+            c += board[i][j]
+    return(c)
+
+
+def isPowerOfTwo(x):
+    return (x and (not(x & (x - 1))))
+
+
 # RGB values of colours used
 BLACK = (0, 0, 0)
 WHITE = (255, 255, 255)
 GREY = (105, 105, 105)
 
 # width and height of each cell
-WIDTH = 20
-HEIGHT = 20
+WIDTH = 5
+HEIGHT = 5
 
 MARGIN = 2      # margin between each cell
 
+p = 0.85    # probability p
+T = 0       # T is the number of iterations
+s = 0
+
+iters = []
+pop = []
+
 board = []      # the original board
 board2 = []     # temporary copy of original board
-rows, cols = (10, 10)   # defining dimensions of board
+rows, cols = (100, 100)   # defining dimensions of board
 for i in range(rows):
     board.append([])
     board2.append([])
@@ -48,11 +70,13 @@ for i in range(rows):
         board2[i].append(0)
 
 # define initial conditions here
-board[2][1] = 1
-board[2][2] = 1
-board[2][3] = 1
-board[1][3] = 1
-board[0][2] = 1
+for i in range(rows):
+    for j in range(cols):
+        RAND = random.random()
+        if(RAND < p):
+            board[i][j] = 1
+        else:
+            board[i][j] = 0
 
 
 pygame.init()
@@ -63,10 +87,25 @@ screen.fill(GREY)
 
 done = False
 
+iters.append(T)
+pop.append(count())
+
 # loop until the user clicks the close button.
 while not done:
+    temp = count()
     step()
     copy()
+    T += 1
+    # if(isPowerOfTwo(T)):
+    #     print(T, " ", count())
+    if temp == count():
+        s += 1
+    # if s == 10:
+    #     done = True
+    iters.append(T)
+    pop.append(count())
+    if count() == 0:
+        done = True
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             done = True
@@ -81,7 +120,12 @@ while not done:
                               (MARGIN + HEIGHT) * i + MARGIN,
                               WIDTH,
                               HEIGHT])
-    clock.tick(1)   # rate of change of state
+    clock.tick(50)   # rate of change of state
     pygame.display.flip()
 
 pygame.quit()
+
+# print(iters)
+# print(pop)
+plt.plot(iters, pop)
+plt.show()

@@ -8,7 +8,7 @@ def step():     # this function updates the state of the board
     for i in range(rows):
         for j in range(cols):
             # counting number of alive neighbours for each cell
-            c = board[i-1][(j-1) % cols]+board[(i-1) % rows][j]+board[(i-1) % rows][(j+1) % cols]+board[i][(j-1) % cols] + \
+            c = board[(i-1) % rows][(j-1) % cols]+board[(i-1) % rows][j]+board[(i-1) % rows][(j+1) % cols]+board[i][(j-1) % cols] + \
                 board[i][(j+1) % cols]+board[(i+1) % rows][(j-1) % cols] + \
                 board[(i+1) % rows][j]+board[(i+1) % rows][(j+1) % cols]
             if(board[i][j] == 1):       # if that cell is alive

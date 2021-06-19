@@ -1,7 +1,6 @@
 import pygame   # used pygame to draw and colour the board
 import random
 import matplotlib.pyplot as plt
-import time
 
 
 def step():     # this function updates the state of the board
@@ -37,14 +36,9 @@ def count():
     return(c)
 
 
-def isPowerOfTwo(x):
-    return (x and (not(x & (x - 1))))
-
-
 # RGB values of colours used
 BLACK = (0, 0, 0)
 WHITE = (255, 255, 255)
-GREY = (105, 105, 105)
 
 # width and height of each cell
 WIDTH = 5
@@ -52,7 +46,7 @@ HEIGHT = 5
 
 MARGIN = 2      # margin between each cell
 
-p = 0.85    # probability p
+p = 0.5    # probability p
 T = 0       # T is the number of iterations
 s = 0
 
@@ -61,7 +55,7 @@ pop = []
 
 board = []      # the original board
 board2 = []     # temporary copy of original board
-rows, cols = (100, 100)   # defining dimensions of board
+rows, cols = (150, 100)   # defining dimensions of board
 for i in range(rows):
     board.append([])
     board2.append([])
@@ -83,7 +77,7 @@ pygame.init()
 screen = pygame.display.set_mode([(WIDTH+MARGIN)*rows, (WIDTH+MARGIN)*cols])
 pygame.display.set_caption("Game of Life")
 clock = pygame.time.Clock()
-screen.fill(GREY)
+screen.fill(BLACK)
 
 done = False
 
@@ -111,13 +105,13 @@ while not done:
             done = True
     for i in range(rows):
         for j in range(cols):
-            color = WHITE
+            color = BLACK
             if board[i][j] == 1:
-                color = BLACK
+                color = WHITE
             pygame.draw.rect(screen,
                              color,
-                             [(MARGIN + WIDTH) * j + MARGIN,
-                              (MARGIN + HEIGHT) * i + MARGIN,
+                             [(MARGIN + WIDTH) * i + MARGIN,
+                              (MARGIN + HEIGHT) * j + MARGIN,
                               WIDTH,
                               HEIGHT])
     clock.tick(50)   # rate of change of state
